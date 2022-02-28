@@ -3,8 +3,15 @@ class Movie < ActiveRecord::Base
         return ['G','PG','PG-13','R', 'NC-17']
     end
     
-    # def self.with_ratings(ratings)
-   
+    def self.with_ratings(ratings, allRatings)
         
-    # end
+        if (ratings.size() > 0)
+            Movie.where(rating: ratings.map{|rating| rating.upcase})
+        else
+            Movie.all
+        end
+        
+        #unable to use????
+        
+    end
 end

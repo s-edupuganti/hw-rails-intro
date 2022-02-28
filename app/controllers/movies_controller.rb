@@ -9,9 +9,35 @@ class MoviesController < ApplicationController
     def index
 
       @all_ratings = Movie.ratings
-      @ratings =  params[:ratings] || @ratings || Hash[@all_ratings.map {|rating| [rating, rating.upcase]}]
+      
+
+      if params[:sort]
+        @sort = params[:sort]
+      else
+        @sort = session[:sort]
+      end
+      
+      # session[:sort] = params[:sort]
+      
+      @ratings =  params[:ratings] || session[:ratings] || @ratings || Hash[@all_ratings.map {|rating| rating.upcase}]
+      
       @ratedMovies = Movie.where(rating:@ratings.keys)
-      @movies = @ratedMovies.order(params[:sort])
+      
+      @movies = @ratedMovies.order(@sort)
+      
+      
+      unless params[:sort] == session[:sort] && params[:ratings] == session[:ratings] # saved state
+        
+        session[:ratings] = @ratings
+        session[:sort] = @sort
+j        
+        flash.keep
+        
+        redirect_to movies_path(sort: session[:sort],ratings:session[:ratings])
+      end
+      
+  
+      
 
       
     end
