@@ -19,7 +19,7 @@ class MoviesController < ApplicationController
       
       # session[:sort] = params[:sort]
       
-      @ratings =  params[:ratings] || session[:ratings] || @ratings || Hash[@all_ratings.map {|rating| [rating, rating]}]
+      @ratings =  params[:ratings] || session[:ratings] || @ratings || Hash[@all_ratings.map {|rating| [rating, rating.upcase]}]
       
       @ratedMovies = Movie.where(rating:@ratings.keys)
       
